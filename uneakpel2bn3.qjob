@@ -9,6 +9,10 @@ ParentWorkingDir="/home/kevin/workspace/pelagonia/pel2bn3"
 WorkingDir="${DatasetName}_mincount_${MinCount}"
 RawDataDir="/data/projects/borevitz"
 
+#more SGE vars
+#$ -o ${ParentWorkingDir}/output
+#$ -e ${ParentWorkingDir}/output
+
 #setup workspace
 cd ${ParentWorkingDir}
 mkdir -p ${WorkingDir}/Illumina
