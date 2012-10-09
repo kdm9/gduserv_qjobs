@@ -1,28 +1,27 @@
 #!/bin/bash
-#$ -t 2-5  #use this to determine min times a tag must be present 
+#$ -cwd
+#$ -t 5-20:5  #use this to determine min times a tag must be present 
 #$ -N uneakpel2bn3
+#$ -o output
+#$ -e output
+
 #UNEAK non-ref pipeline
-TasselCMD="/data/bio/bin/versioned_apps/jdk1.7.0_05/bin/java -classpath /data/bio/bin/versioned_apps/tassel3.0_standalone/sTASSEL.jar -Xms20g -Xmx24g net.maizegenetics.pipeline.TasselPipeline"
+TasselCMD="/data/bio/bin/versioned_apps/jdk1.7.0_05/bin/java -classpath /data/bio/bin/versioned_apps/tassel3.0_standalone/sTASSEL.jar -Xms20g -Xmx48g net.maizegenetics.pipeline.TasselPipeline"
 DatasetName=pel2bn3
 MinCount=${SGE_TASK_ID}
 ParentWorkingDir="/home/kevin/workspace/pelagonia/pel2bn3"
 WorkingDir="${DatasetName}_mincount_${MinCount}"
 RawDataDir="/data/projects/borevitz"
 
-#more SGE vars
-#$ -o ${ParentWorkingDir}/output
-#$ -e ${ParentWorkingDir}/output
+cd ${ParentWorkingDir}
 
 #setup workspace
-cd ${ParentWorkingDir}
-mkdir -p ${WorkingDir}/Illumina
-mkdir -p ${WorkingDir}/key
+$TasselCMD -fork1 -UCreatWorkingDirPlugin -w ${WorkingDir} -endPlugin -runfork1
 ln -s ${RawDataDir}/reads/Pel3.both.fq.gz ./${WorkingDir}/Illumina/PEL_s_2_sequence.txt.gz
 ln -s ${RawDataDir}/reads/Pel2b.both.fq.gz ./${WorkingDir}/Illumina/PEL_s_1_sequence.txt.gz
 ln -s ${RawDataDir}/key.${DatasetName}.txt ./${WorkingDir}/key/key.txt
 
 #Run pipeline
-$TasselCMD -fork1 -UCreatWorkingDirPlugin -w ${WorkingDir} -endPlugin -runfork1
 $TasselCMD -fork1 -UFastqToTagCountPlugin -w ${WorkingDir} -e PstI -endPlugin -runfork1
 $TasselCMD -fork1 -UMergeTaxaTagCountPlugin -w ${WorkingDir} -c $MinCount -endPlugin -runfork1
 $TasselCMD -fork1 -UTagCountToTagPairPlugin -w ${WorkingDir} -e 0.03 -endPlugin -runfork1
