@@ -7,14 +7,15 @@ DatasetName=pel2bn3
 MinCount=${SGE_TASK_ID}
 ParentWorkingDir="/home/kevin/workspace/pelagonia/pel2bn3"
 WorkingDir="${DatasetName}_mincount_${MinCount}"
+RawDataDir="/data/projects/borevitz"
 
 #setup workspace
 cd ${ParentWorkingDir}
 mkdir -p ${WorkingDir}/Illumina
 mkdir -p ${WorkingDir}/key
-ln -s ../Pel3.both.fq.gz ./${WorkingDir}/Illumina/PEL_s_2_sequence.txt.gz
-ln -s ../Pel2b.both.fq.gz ./${WorkingDir}/Illumina/PEL_s_1_sequence.txt.gz
-ln -s ../key.txt ./${WorkingDir}/key/key.txt
+ln -s ${RawDataDir}/reads/Pel3.both.fq.gz ./${WorkingDir}/Illumina/PEL_s_2_sequence.txt.gz
+ln -s ${RawDataDir}/reads/Pel2b.both.fq.gz ./${WorkingDir}/Illumina/PEL_s_1_sequence.txt.gz
+ln -s ${RawDataDir}/key.${DatasetName}.txt ./${WorkingDir}/key/key.txt
 
 #Run pipeline
 $TasselCMD -fork1 -UCreatWorkingDirPlugin -w ${WorkingDir} -endPlugin -runfork1
