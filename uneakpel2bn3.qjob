@@ -1,0 +1,27 @@
+#!/bin/bash
+#$ -t 2-5  #use this to determine min times a tag must be present 
+#$ -N uneakpel2bn3
+#UNEAK non-ref pipeline
+TasselCMD="/data/bio/bin/versioned_apps/jdk1.7.0_05/bin/java -classpath /data/bio/bin/versioned_apps/tassel3.0_standalone/sTASSEL.jar -Xms20g -Xmx24g net.maizegenetics.pipeline.TasselPipeline"
+DatasetName=pel2bn3
+MinCount=${SGE_TASK_ID}
+ParentWorkingDir="/home/kevin/workspace/pelagonia/pel2bn3"
+WorkingDir="${DatasetName}_mincount_${MinCount}"
+
+#setup workspace
+cd ${ParentWorkingDir}
+mkdir -p ${WorkingDir}/Illumina
+mkdir -p ${WorkingDir}/key
+ln -s ../Pel3.both.fq.gz ./${WorkingDir}/Illumina/PEL_s_2_sequence.txt.gz
+ln -s ../Pel2b.both.fq.gz ./${WorkingDir}/Illumina/PEL_s_1_sequence.txt.gz
+ln -s ../key.txt ./${WorkingDir}/key/key.txt
+
+#Run pipeline
+$TasselCMD -fork1 -UCreatWorkingDirPlugin -w ${WorkingDir} -endPlugin -runfork1
+$TasselCMD -fork1 -UFastqToTagCountPlugin -w ${WorkingDir} -e PstI -endPlugin -runfork1
+$TasselCMD -fork1 -UMergeTaxaTagCountPlugin -w ${WorkingDir} -c $MinCount -endPlugin -runfork1
+$TasselCMD -fork1 -UTagCountToTagPairPlugin -w ${WorkingDir} -e 0.03 -endPlugin -runfork1
+$TasselCMD -fork1 -UTagPairToTBTPlugin -w ${WorkingDir} -endPlugin -runfork1
+$TasselCMD -fork1 -UTBTToMapInfoPlugin -w ${WorkingDir} -endPlugin -runfork1
+$TasselCMD -fork1 -UMapInfoToHapMapPlugin -w ${WorkingDir} -mnMAF 0.05 -mxMAF 0.5 -mnC 0 -mxC 1 -endPlugin -runfork1
+
