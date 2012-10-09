@@ -1,0 +1,8 @@
+#!/bin/bash
+# Change dir to cwd
+#$ -cwd
+
+#$ -N <name>
+# Enter an array job
+#$ -t 1-2
+echo "Task ${SGE_TASK_ID} on `hostname` with ${NSLOTS} slots"
