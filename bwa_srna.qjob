@@ -1,0 +1,11 @@
+#!/bin/bash
+# Change dir to cwd
+#$ -cwd
+#$ -e ./bwa/output
+#$ -o ./bwa/output
+#$ -N bwa
+# Enter an array job
+#$ -t 1-9
+bwa aln -n 0 -t 24 tx_tair10rep.fasta srna_${SGE_TASK_ID}.fasta > ./bwa/srna_${SGE_TASK_ID}.sai
+bwa samse -n 0 tx_tair10rep.fasta ./bwa/srna_${SGE_TASK_ID}.sai srna_${SGE_TASK_ID}.fasta > ./bwa/srna_${SGE_TASK_ID}.sam
+

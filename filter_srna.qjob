@@ -1,0 +1,10 @@
+#!/bin/bash
+# Change dir to cwd
+#$ -cwd
+#$ -e ./srna_filt/output
+#$ -o ./srna_filt/output
+#$ -N srna_filt
+# Enter an array job
+#$ -t 1-9
+fastx_trimmer -i srna_${SGE_TASK_ID}.fasta -o ./srna_filt/srna_${SGE_TASK_ID}.trimmed.fasta -l 24 -m 19
+fastx_collapser -i ./srna_filt/srna_${SGE_TASK_ID}.trimmed.fasta -o ./srna_filt/srna_${SGE_TASK_ID}.collapsed.fasta
