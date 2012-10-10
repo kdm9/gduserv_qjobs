@@ -1,8 +1,8 @@
 #!/bin/bash
-# Change dir to cwd
-#$ -cwd
-
+#$ -cwd #run frow where qsub is called from
+#$ -t 5-20:5  # Start-End:step 
 #$ -N <name>
-# Enter an array job
-#$ -t 1-2
-echo "Task ${SGE_TASK_ID} on `hostname` with ${NSLOTS} slots"
+#$ -o <outdir>/output
+#$ -e <outdir>output
+
+echo "Task ${SGE_TASK_ID} with ${NSLOTS} slots"
