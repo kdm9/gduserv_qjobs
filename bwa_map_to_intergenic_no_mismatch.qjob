@@ -1,0 +1,11 @@
+#!/bin/bash
+# Change dir to cwd
+#$ -cwd
+#$ -e ./map_to_intergenic_no_mismatch/output
+#$ -o ./map_to_intergenic_no_mismatch/output
+#$ -N map_to_intergenic_no_mismatch
+# Enter an array job
+#$ -t 1-9
+bwa aln -o 0 -g 0 -n 0 -t 24 ~/workspace/arabidopsis_refseqs/ig_tair10.fasta deg_${SGE_TASK_ID}.fasta > ./map_to_intergenic_no_mismatch/deg_${SGE_TASK_ID}.sa
+bwa samse ~/workspace/arabidopsis_refseqs/ig_tair10.fasta ./map_to_intergenic_no_mismatch/deg_${SGE_TASK_ID}.sai deg_${SGE_TASK_ID}.fasta > ./map_to_intergenic_no_mismatch/deg_${SGE_TASK_ID}.sam
+
