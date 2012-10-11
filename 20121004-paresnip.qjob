@@ -4,5 +4,6 @@
 
 #$ -N PAREsnip
 # Enter an array job
-#$ -t 7-9
-java -Xmx47g -jar /home/kevin/opt/srna-workbenchV2.4.2/Workbench.jar -tool paresnip -f -params paresnip.params -deg_file deg_${SGE_TASK_ID}.fasta -srna_file srna_${SGE_TASK_ID}.fasta -tran_file tx_tair10rep.fasta -out_file output/paresnip_${SGE_TASK_ID}.csv
+#$ -t 1-9
+java -Xmx47g -jar /home/kevin/opt/srna-workbenchV2.4.2/Workbench.jar -tool paresnip -f -params paresnip.params -deg_file deg_${SGE_TASK_ID}.fasta -srna_file srna_${SGE_TASK_ID}.fasta -tran_file tx_tair10rep.fasta -out_file output/paresnip_${SGE_TASK_ID}.raw
+/home/kevin/bin/pypy /home/kevin/scripts/sanitise_paresnip_output.py output/paresnip_${SGE_TASK_ID}.raw > output/paresnip_${SGE_TASK_ID}.tab
