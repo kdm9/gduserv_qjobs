@@ -5,4 +5,4 @@
 #$ -o workspace/degradome/map_to_intergenic_no_mismatch/output
 #$ -e workspace/degradome/map_to_intergenic_no_mismatch/output
 
-htseq-count -t intergenic -i ID ~/workspace/degradome/map_to_intergenic_no_mismatch/deg_${SGE_TASK_ID}.sam ~/workspace/arabidopsis_refseqs/ig_tair10.gff3 > ~/workspace/degradome/map_to_intergenic_no_mismatch/deg_${SGE_TASK_ID}.count
+/home/kevin/.local/bin/htseq-count -t intergenic -i ID ~/workspace/degradome/map_to_intergenic_no_mismatch/deg_${SGE_TASK_ID}.sam ~/workspace/arabidopsis_refseqs/ig_tair10.gff3 > ~/workspace/degradome/map_to_intergenic_no_mismatch/deg_${SGE_TASK_ID}.count
