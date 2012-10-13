@@ -17,6 +17,8 @@ cd ${ParentWorkingDir}
 
 #setup workspace
 $TasselCMD -fork1 -UCreatWorkingDirPlugin -w ${WorkingDir} -endPlugin -runfork1
+
+#########################################ADD YOUR READ AND KEY FILES HERE##############################################
 ln -s ${RawDataDir}/reads/Pel3.both.fq.gz ./${WorkingDir}/Illumina/PEL_s_2_sequence.txt.gz
 ln -s ${RawDataDir}/reads/Pel2b.both.fq.gz ./${WorkingDir}/Illumina/PEL_s_1_sequence.txt.gz
 ln -s ${RawDataDir}/key.${DatasetName}.txt ./${WorkingDir}/key/key.txt
@@ -28,4 +30,4 @@ $TasselCMD -fork1 -UTagCountToTagPairPlugin -w ${WorkingDir} -e 0.03 -endPlugin 
 $TasselCMD -fork1 -UTagPairToTBTPlugin -w ${WorkingDir} -endPlugin -runfork1
 $TasselCMD -fork1 -UTBTToMapInfoPlugin -w ${WorkingDir} -endPlugin -runfork1
 $TasselCMD -fork1 -UMapInfoToHapMapPlugin -w ${WorkingDir} -mnMAF 0.05 -mxMAF 0.5 -mnC 0 -mxC 1 -endPlugin -runfork1
-
+${RawDataDir}/hmp2num.pl < ./${WorkingDir}/hapMap/HapMap.hmp.txt > ./${WorkingDir}/hapMap/HapMap.hmn.txt
