@@ -1,0 +1,7 @@
+#!/bin/bash
+# Change dir to cwd
+#$ -cwd
+#$ -N sanitise-PAREsnip
+# Enter an array job
+#$ -t 1-9
+/home/kevin/bin/pypy /home/kevin/scripts/sanitise_paresnip_output.py output/paresnip_${SGE_TASK_ID}.csv > output/paresnip_${SGE_TASK_ID}.tab
