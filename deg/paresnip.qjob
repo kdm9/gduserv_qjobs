@@ -5,7 +5,7 @@
 #$ -e paresnip/output
 #$ -N PAREsnip
 # Enter an array job
-#$ -t 15-15
+#$ -t 1-13
 JobName="paresnip"
 ReferenceDir="/home/kevin/workspace/arabidopsis_refseqs"
 
