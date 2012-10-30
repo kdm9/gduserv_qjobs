@@ -1,0 +1,55 @@
+#!/bin/bash
+#$ -cwd
+#$ -t 1-3  #use this to determine min times a tag must be present 
+#$ -N uneak_pel2bn3_crosscheck
+#$ -o output
+#$ -e output
+
+#UNEAK non-ref pipeline
+TasselCMD="/data/bio/bin/versioned_apps/jdk1.7.0_05/bin/java -classpath /data/bio/bin/versioned_apps/tassel3.0_standalone/sTASSEL.jar -Xms20g -Xmx48g net.maizegenetics.pipeline.TasselPipeline"
+
+
+if [ ${SGE_TASK_ID} -eq 1 ]
+then
+    DatasetName=pel2b
+elif [ ${SGE_TASK_ID} -eq 2 ]
+then
+    DatasetName=pel3
+elif [ ${SGE_TASK_ID} -eq 3 ]
+then
+    DatasetName=pel2bn3
+fi
+
+ParentWorkingDir="/home/kevin/workspace/pel/pel_crosscheck"
+WorkingDir="${ParentWorkingDir}/${DatasetName}_crosscheck"
+RawDataDir="/data/projects/borevitz"
+
+cd ${ParentWorkingDir}
+
+#setup workspace
+$TasselCMD -fork1 -UCreatWorkingDirPlugin -w ${WorkingDir} -endPlugin -runfork1
+
+#########################################ADD YOUR READ AND KEY FILES HERE##############################################
+if [ ${SGE_TASK_ID} -eq 1 ]
+then
+    ln -s ${RawDataDir}/reads/Pel2b.both.fq.gz ${WorkingDir}/Illumina/PEL_s_1_sequence.txt.gz
+elif [ ${SGE_TASK_ID} -eq 2 ]
+then
+    ln -s ${RawDataDir}/reads/Pel3.both.fq.gz ${WorkingDir}/Illumina/PEL_s_2_sequence.txt.gz
+elif [ ${SGE_TASK_ID} -eq 3 ]
+then
+    ln -s ${RawDataDir}/reads/Pel3.both.fq.gz ${WorkingDir}/Illumina/PEL_s_2_sequence.txt.gz
+    ln -s ${RawDataDir}/reads/Pel2b.both.fq.gz ${WorkingDir}/Illumina/PEL_s_1_sequence.txt.gz
+fi
+
+ln -s ${RawDataDir}/key.pel2bn3.txt ${WorkingDir}/key/key.txt
+
+#Run pipeline
+$TasselCMD -fork1 -UFastqToTagCountPlugin -w ${WorkingDir} -e PstI -endPlugin -runfork1
+$TasselCMD -fork1 -UMergeTaxaTagCountPlugin -w ${WorkingDir} -c 5 -endPlugin -runfork1
+$TasselCMD -fork1 -UTagCountToTagPairPlugin -w ${WorkingDir} -e 0.03 -endPlugin -runfork1
+$TasselCMD -fork1 -UTagPairToTBTPlugin -w ${WorkingDir} -endPlugin -runfork1
+$TasselCMD -fork1 -UTBTToMapInfoPlugin -w ${WorkingDir} -endPlugin -runfork1
+$TasselCMD -fork1 -UMapInfoToHapMapPlugin -w ${WorkingDir} -mnMAF 0.05 -mxMAF 0.5 -mnC 0 -mxC 1 -endPlugin -runfork1
+${RawDataDir}/hmp2num.pl < ${WorkingDir}/hapMap/HapMap.hmp.txt > ${WorkingDir}/hapMap/HapMap.hmn.txt
+
