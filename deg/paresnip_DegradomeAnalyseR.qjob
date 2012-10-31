@@ -1,0 +1,43 @@
+#!/bin/bash
+# Change dir to cwd
+#$ -cwd
+#$ -o paresnip/output
+#$ -e paresnip/output
+#$ -N DegradomeAnalyseR
+# Enter an array job
+#$ -t 1-2
+JobName="paresnipDA"
+ReferenceDir="/home/kevin/workspace/arabidopsis_refseqs"
+DAPath="/home/kevin/scripts/DegradomeAnalyseR"
+TargetCSV="${ReferenceDir}/tx_tair10rep.csv"
+
+case ${SGE_TASK_ID} in
+    1)
+    PAREsnipFiles="paresnip_1.tab paresnip_2.tab paresnip_3.tab"
+    Group="col0"
+    ;;
+    2)
+    PAREsnipFiles="paresnip_4.tab paresnip_5.tab paresnip_6.tab"
+    Group="xrn4"
+    ;;
+    3)
+    PAREsnipFiles="paresnip_7.tab paresnip_8.tab paresnip_9.tab"
+    Group="alx8"
+    ;;
+    4)
+    PAREsnipFiles="paresnip_10.tab paresnip_11.tab"
+    Group="col0_ecker"
+    ;;
+    5)
+    PAREsnipFiles="paresnip_12.tab paresnip_13.tab"
+    Group="xrn4_ecker"
+    ;;
+esac
+
+
+cd paresnip
+
+R ${DAPath}/paresnip_filter.R --args  $PAREsnipFiles $Group
+R ${DAPath}/paresnip_summarise.R --args  $Group.conserved.tab $Group
+R ${DAPath}/paresnip_correlate_FA_SRA.R --args  $Group.summarised.csv $Group
+#R ${DAPath}/paresnip_downstream_bias.R --args  $Group.summarised.csv $Group
