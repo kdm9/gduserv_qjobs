@@ -5,10 +5,10 @@
 #$ -e paresnip/output
 #$ -N PAREsnip
 # Enter an array job
-#$ -t 1-13
+#$ -t 1-6
 JobName="paresnip"
 ReferenceDir="/home/kevin/workspace/arabidopsis_refseqs"
 
-java -Xmx48g -jar /home/kevin/opt/srna-workbenchV2.4.2/Workbench.jar -tool paresnip -f -params ${JobName}/paresnip.params -deg_file deg_${SGE_TASK_ID}.fasta -srna_file srna_${SGE_TASK_ID}.fasta -tran_file ${ReferenceDir}/tx_tair10rep.fasta -out_file ${JobName}/paresnip_${SGE_TASK_ID}.raw
-/home/kevin/bin/pypy /home/kevin/scripts/sanitise_paresnip_output.py ${JobName}/paresnip_${SGE_TASK_ID}.raw > ${JobName}/paresnip_${SGE_TASK_ID}.tab
+#java -Xmx48g -jar /home/kevin/opt/srna-workbenchV2.4.2/Workbench.jar -tool paresnip -f -params ${JobName}/paresnip.params -deg_file deg_${SGE_TASK_ID}.fasta -srna_file srna_${SGE_TASK_ID}.fasta -tran_file ${ReferenceDir}/tx_tair10rep.fasta -out_file ${JobName}/paresnip_${SGE_TASK_ID}.raw
+/home/kevin/bin/pypy /home/kevin/scripts/DegradomeAnalyseR/sanitise_paresnip_output.py ${JobName}/paresnip_${SGE_TASK_ID}.raw > ${JobName}/paresnip_${SGE_TASK_ID}.tab
 

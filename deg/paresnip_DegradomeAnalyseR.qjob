@@ -37,7 +37,10 @@ esac
 
 cd paresnip
 
-R ${DAPath}/paresnip_filter.R --args  $PAREsnipFiles $Group
-R ${DAPath}/paresnip_summarise.R --args  $Group.conserved.tab $Group
-R ${DAPath}/paresnip_correlate_FA_SRA.R --args  $Group.summarised.csv $Group
-#R ${DAPath}/paresnip_downstream_bias.R --args  $Group.summarised.csv $Group
+echo "R --no-save -f ${DAPath}/paresnip_filter.R --args  $PAREsnipFiles $Group"
+R --no-save -f ${DAPath}/paresnip_filter.R --args  $PAREsnipFiles $Group
+echo "R --no-save -f ${DAPath}/paresnip_summarise.R --args  $Group.conserved.tab $Group"
+R --no-save -f ${DAPath}/paresnip_summarise.R --args  $Group.conserved.tab $Group
+echo "R --no-save -f ${DAPath}/paresnip_correlate_FA_SRA.R --args  $Group.summarised.csv ${ReferenceDir}/tx_tair10rep.targets.csv $Group"
+R --no-save -f ${DAPath}/paresnip_correlate_FA_SRA.R --args  $Group.summarised.csv ${ReferenceDir}/tx_tair10rep.targets.csv $Group
+#R --no-save -f ${DAPath}/paresnip_downstream_bias.R --args  $Group.summarised.csv $Group
