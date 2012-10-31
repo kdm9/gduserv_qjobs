@@ -7,5 +7,5 @@
 Job="ecker_rnaseq"
 BaseDir="/home/kevin/workspace/deg"
 JobDir="${BaseDir}/${Job}"
-samtools view -bS rnaseq_${SGE_TASK_ID}.sam > ${JobDir}/rnaseq_${SGE_TASK_ID}.bam
+samtools view -bS -t /home/kevin/workspace/arabidopsis_refseqs/TAIR9_chrs.samheader rnaseq_${SGE_TASK_ID}.sam > ${JobDir}/rnaseq_${SGE_TASK_ID}.bam
 
