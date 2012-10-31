@@ -1,0 +1,11 @@
+#!/bin/bash
+#$ -cwd #run frow where qsub is called from
+#$ -t 1:16 
+#$ -N Sam2Bam
+#$ -o ecker_rnaseq/output
+#$ -e ecker_rnaseq/output
+Job="ecker_rnaseq"
+BaseDir="/home/kevin/workspace/deg"
+JobDir="${BaseDir}/${Job}"
+samtools view -bS rnaseq_${SGE_TASK_ID}.sam > ${JobDir}/rnaseq_${SGE_TASK_ID}.bam
+
