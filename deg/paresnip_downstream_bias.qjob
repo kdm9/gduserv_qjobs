@@ -1,0 +1,38 @@
+#!/bin/bash
+# Change dir to cwd
+#$ -cwd
+#$ -o output
+#$ -e output
+#$ -N DS-bias_DegradomeAnalyseR
+# Enter an array job
+#$ -t 1-2
+JobName="paresnipDA"
+ReferenceDir="/home/kevin/workspace/arabidopsis_refseqs"
+DAPath="/home/kevin/scripts/DegradomeAnalyseR"
+TargetCSV="${ReferenceDir}/tx_tair10rep.targets.csv"
+
+case ${SGE_TASK_ID} in
+    1)
+    Group="col0"
+    RNA="col0"
+    ;;
+    2)
+    Group="xrn4"
+    RNA="xrn4"
+    ;;
+    3)
+    Group="alx8"
+    RNA="alx8"
+    ;;
+    4)
+    Group="col0_ecker"
+    RNA="col0"
+    ;;
+    5)
+    Group="xrn4_ecker"
+    RNA="xrn4"
+    ;;
+esac
+
+
+R --no-save -f ${DAPath}/paresnip_downstream_bias.R --args  $Group.summarised.csv $TargetCSV ${Group}.rnaseq.csv $Group
