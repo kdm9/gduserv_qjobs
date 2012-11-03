@@ -33,7 +33,7 @@ cd ${WorkingDir}
 
 R --no-save -f ${GBSFilteRPath}/tassel_fasta_to_csv.R --args ${DatasetName}.fas.txt ${DatasetName}
 R --no-save -f ${GBSFilteRPath}/tassel_hmn_to_tagseq.R --args ${DatasetName}.hmn.txt ${DatasetName}.fas.csv ${DatasetName}
-R --no-save -f ${GBSFilteRPath}/tassel_filter_hapmap.R --args ${DatasetName}.hmnfas.txt ${SampleSheet} ${DatasetName}
+R --no-save -f ${GBSFilteRPath}/tassel_filter_hapmap.R --args ${DatasetName}.hmnfas.csv ${SampleSheet} ${DatasetName}
 R --no-save -f ${GBSFilteRPath}/tassel_create_tree.R --args ${DatasetName}.filtered.csv ${DatasetName}
-R --no-save -f ${GBSFilteRPath}/tassel_create_gps_table.R --args ${DatasetName}.filtered.csv ${DatasetName}.phylogroups.csv ${DatasetName}
+R --no-save -f ${GBSFilteRPath}/tassel_create_gps_table.R --args ${DatasetName}.filtered.csv ${DatasetName}.phylogroups.csv ${DatasetName}.names.csv ${DatasetName}
 
