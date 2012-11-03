@@ -10,7 +10,6 @@ JobName="paresnipDA"
 ReferenceDir="/home/kevin/workspace/arabidopsis_refseqs"
 DAPath="/home/kevin/scripts/DegradomeAnalyseR"
 TargetCSV="${ReferenceDir}/tx_tair10rep.csv"
-if [ ${SGE_TASK_ID} -eq 3 ]; then exit; fi
 
 case ${SGE_TASK_ID} in
     1)
@@ -22,7 +21,8 @@ case ${SGE_TASK_ID} in
     Group="xrn4"
     ;;
     3)
-    PAREsnipFiles="paresnip_7.tab paresnip_8.tab paresnip_9.tab"
+    #PAREsnipFiles="paresnip_7.tab paresnip_8.tab paresnip_9.tab"
+    PAREsnipFiles="paresnip_14.tab paresnip_15.tab paresnip_16.tab"
     Group="alx8"
     ;;
     4)
