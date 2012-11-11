@@ -1,0 +1,27 @@
+#!/bin/bash
+# Change dir to cwd
+#$ -cwd
+#$ -o paresnip/output
+#$ -e paresnip/output
+#$ -N Targsearch
+# Enter an array job
+#$ -t 8-8
+JobName="Targsearch"
+ReferenceDir="/home/kevin/workspace/arabidopsis_refseqs"
+
+cd paresnip
+mkdir Targs
+ grep -o -P "^AT[12345MC]G[0123456789]+.[123456789]" paresnip_${SGE_TASK_ID}.tab > Targs/paresnip_${SGE_TASK_ID}.targs
+
+cd Targs
+
+echo "paresnip_${SGE_TASK_ID} has the following number of known Targs"
+grep -c -f ~/target.agis.mirtarbase paresnip_${SGE_TASK_ID}.targs
+
+echo "out of the following number of Targs"
+wc -l < paresnip_${SGE_TASK_ID}.targs
+
+echo "of which the following number are unique"
+
+sort <  paresnip_${SGE_TASK_ID}.targs | uniq |wc -l
+

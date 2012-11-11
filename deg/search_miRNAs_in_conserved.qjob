@@ -1,0 +1,47 @@
+#!/bin/bash
+# Change dir to cwd
+#$ -cwd
+#$ -o paresnip/output
+#$ -e paresnip/output
+#$ -N miRNAsearch
+# Enter an array job
+#$ -t 1-5
+JobName="miRNAsearch"
+ReferenceDir="/home/kevin/workspace/arabidopsis_refseqs"
+
+
+case ${SGE_TASK_ID} in
+    1)
+    Group="col0"
+    ;;
+    2)
+    Group="xrn4"
+    ;;
+    3)
+    Group="alx8"
+    ;;
+    4)
+    Group="col0_ecker"
+    ;;
+    5)
+    Group="xrn4_ecker"
+    ;;
+esac
+
+cd paresnip/DA
+mkdir miRNAs
+grep -o -P "5' +[ATCG]+ +3'" ${Group}.conserved.tab > miRNAs/${Group}.conserved.srnas
+
+cd miRNAs
+
+echo "${Group}.conserved has the following number of known miRNAs"
+grep -c -f ~/mirbase.ath.seqs ${Group}.conserved.srnas
+
+echo "out of the following number of sRNAs"
+wc -l < ${Group}.conserved.srnas
+
+echo "of which the following number are unique"
+
+sort <  ${Group}.conserved.srnas | uniq |wc -l
+
+
