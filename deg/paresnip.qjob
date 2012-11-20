@@ -1,16 +1,17 @@
 #!/bin/bash
 # Change dir to cwd
 #$ -cwd
-#$ -o paresnip/output
-#$ -e paresnip/output
+#$ -o output
+#$ -e output
 #$ -N PAREsnip
+#$ -pe threads 12
 # Enter an array job
-#$ -t 1-6
+#$ -t 1-2
 JobName="paresnip"
 ReferenceDir="/home/kevin/workspace/arabidopsis_refseqs"
 
 java -Xmx62g -jar /home/kevin/opt/srna-workbenchV2.4.2/Workbench.jar -tool paresnip -f -params /home/kevin/qjobs/deg/paresnip.params -deg_file deg_${SGE_TASK_ID}.fasta -srna_file srna_${SGE_TASK_ID}.fasta -tran_file ${ReferenceDir}/tx_tair10rep.fasta -out_file ${JobName}/paresnip_${SGE_TASK_ID}.${JOB_ID}.raw
 
-/home/kevin/bin/pypy /home/kevin/scripts/DegradomeAnalyseR/sanitise_paresnip_output.py ${JobName}/paresnip_${SGE_TASK_ID}.raw > ${JobName}/paresnip_${SGE_TASK_ID}.tab
+/home/kevin/bin/pypy /home/kevin/scripts/DegradomeAnalyseR/sanitise_paresnip_output.py ${JobName}/paresnip_${SGE_TASK_ID}.${JOB_ID}.raw > ${JobName}/paresnip_${SGE_TASK_ID}.${JOB_ID}.tab
 
 
