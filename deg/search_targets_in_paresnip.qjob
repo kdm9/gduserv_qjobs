@@ -16,7 +16,7 @@ mkdir Targs
 cd Targs
 
 echo "paresnip_${SGE_TASK_ID} has the following number of known Targs"
-grep -c -f ~/target.agis.mirtarbase paresnip_${SGE_TASK_ID}.targs
+grep -c -f ~/workspace/arabidopsis_refseq/target.agis.mirtarbase paresnip_${SGE_TASK_ID}.targs
 
 echo "out of the following number of Targs"
 wc -l < paresnip_${SGE_TASK_ID}.targs

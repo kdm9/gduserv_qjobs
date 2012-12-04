@@ -30,11 +30,11 @@ esac
 
 cd paresnip/DA
 mkdir Targs
-grep -o -P "AT[12345MC]G[0123456789]+.[123456789]" ${Group}.conserved.tab > Targs/${Group}.conserved.targs
+grep -o -P "AT[12345MC]G[0123456789]+.[123456789]" ${Group}.summarised.csv > Targs/${Group}.conserved.targs
 cd Targs
 
 echo "${Group}.conserved has the following number of known Targs"
-grep -c -f ~/target.agis.mirtarbase ${Group}.conserved.targs
+grep -c -f ~/workspace/arabidopsis_refseq/target.agis.mirtarbase ${Group}.conserved.targs
 
 echo "out of the following number of targs"
 wc -l < ${Group}.conserved.targs

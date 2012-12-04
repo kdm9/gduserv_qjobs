@@ -30,12 +30,12 @@ esac
 
 cd paresnip/DA
 mkdir miRNAs
-grep -o -P "5' +[ATCG]+ +3'" ${Group}.conserved.tab > miRNAs/${Group}.conserved.srnas
+grep -o -P "\"[0123456789]+\".+5' +[AT\-CG]+ +3'" ${Group}.conserved.tab  |uniq |sed -e "s/-//g" |grep -o -P "5' +[AT\-CG]+ +3'" > miRNAs/${Group}.conserved.srnas
 
 cd miRNAs
 
 echo "${Group}.conserved has the following number of known miRNAs"
-grep -c -f ~/mirbase.ath.seqs ${Group}.conserved.srnas
+grep -c -f ~/workspace/arabidopsis_refseqs/mirbase.ath.seqs ${Group}.conserved.srnas
 
 echo "out of the following number of sRNAs"
 wc -l < ${Group}.conserved.srnas
