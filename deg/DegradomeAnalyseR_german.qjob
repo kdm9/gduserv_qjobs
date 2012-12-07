@@ -5,7 +5,7 @@
 #$ -e output
 #$ -N DegradomeAnalyseR
 # Enter an array job
-#$ -t 1-2
+#$ -t 1
 JobName="paresnipDA"
 ReferenceDir="/home/kevin/workspace/arabidopsis_refseqs"
 DAPath="/home/kevin/scripts/DegradomeAnalyseR"
@@ -13,12 +13,8 @@ TargetCSV="${ReferenceDir}/tx_tair10rep.csv"
 
 case ${SGE_TASK_ID} in
     1)
-    PAREsnipFiles="paresnip_1.tab"
-    Group="col0"
-    ;;
-    2)
-    PAREsnipFiles="paresnip_2.tab"
-    Group="xrn4"
+    PAREsnipFiles="paresnip_1.tab paresnip_2.tab"
+    Group="col+xrn"
     ;;
 esac
 
@@ -33,4 +29,3 @@ R --no-save -f ${DAPath}/paresnip_summarise.R --args  DA/$Group.conserved.tab DA
 echo "R --no-save -f ${DAPath}/paresnip_correlate_FA_SRA.R --args  DA/$Group.summarised.csv ${ReferenceDir}/tx_tair10rep.targets.csv DA/$Group"
 R --no-save -f ${DAPath}/paresnip_correlate_FA_SRA.R --args  DA/$Group.summarised.csv ${ReferenceDir}/tx_tair10rep.targets.csv DA/$Group
 echo "R --no-save -f ${DAPath}/paresnip_downstream_bias.R --args  DA/$Group.summarised.csv ${ReferenceDir}/tx_tair10rep.targets.csv DA/${Group}.rnaseq.csv DA/$Group"
-R --no-save -f ${DAPath}/paresnip_downstream_bias.R --args  DA/$Group.summarised.csv ${ReferenceDir}/tx_tair10rep.targets.csv DA/${Group}.rnaseq.csv DA/$Group
