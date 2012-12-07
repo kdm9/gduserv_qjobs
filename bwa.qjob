@@ -1,23 +1,34 @@
 #!/bin/bash
 # Change dir to cwd
+# ENSURE CWD IS THE PROJECT DIR, e.g. workspace/deg/deg_genomic/
 #$ -cwd
 #$ -e ./output
 #$ -o ./output
 #$ -N km_bwa
+#$ -pe threads 12
 # Enter an array job
-#$ -t 1-9
+#$ -t 1-13
 
 ScriptDir="/home/kevin/scripts"
 
 #CHANGE THESE PARAMS
 SamplePrefix="deg"
 ProjectName="${SamplePrefix}_genome"
-Reference="/home/kevin/workspace/refs/TAIR10_all_chrs.fas"
+Reference="/home/kevin/workspace/refs/TAIR10_genome/TAIR10_all_chrs.fas"
 
 
-bwa aln -n 0 -t 12 ${Reference} ${SamplePrefix}_${SGE_TASK_ID}.fasta > ./${ProjectName}/${SamplePrefix}_${SGE_TASK_ID}.sai
-bwa samse -n 0 ${Reference} ./${ProjectName}/${SamplePrefix}_${SGE_TASK_ID}.sai ${SamplePrefix}_${SGE_TASK_ID}.fasta > ./${ProjectName}/${SamplePrefix}_${SGE_TASK_ID}.sam
-samtools view -b -S -o ./${ProjectName}/${SamplePrefix}_${SGE_TASK_ID}.bam ./${ProjectName}/${SamplePrefix}_${SGE_TASK_ID}.sam
+echo bwa aln -n 0 -t 12 ${Reference} ${SamplePrefix}_${SGE_TASK_ID}.fasta \> ${SamplePrefix}_${SGE_TASK_ID}.sai
+bwa aln -n 0 -t 12 ${Reference} ${SamplePrefix}_${SGE_TASK_ID}.fasta > ${SamplePrefix}_${SGE_TASK_ID}.sai
+echo bwa samse -n 0 ${Reference} ${SamplePrefix}_${SGE_TASK_ID}.sai ${SamplePrefix}_${SGE_TASK_ID}.fasta \> ${SamplePrefix}_${SGE_TASK_ID}.sam
+bwa samse -n 0 ${Reference} ${SamplePrefix}_${SGE_TASK_ID}.sai ${SamplePrefix}_${SGE_TASK_ID}.fasta > ${SamplePrefix}_${SGE_TASK_ID}.sam
 
-rm -v  ./${ProjectName}/${SamplePrefix}_${SGE_TASK_ID}.sai ./${ProjectName}/${SamplePrefix}_${SGE_TASK_ID}.sam
+echo samtools view -b -S -o ${SamplePrefix}_${SGE_TASK_ID}.bam ${SamplePrefix}_${SGE_TASK_ID}.sam
+samtools view -b -S -o ${SamplePrefix}_${SGE_TASK_ID}.usbam ${SamplePrefix}_${SGE_TASK_ID}.sam
+echo samtools sort ${SamplePrefix}_${SGE_TASK_ID}.usbam ${SamplePrefix}_${SGE_TASK_ID}
+samtools sort ${SamplePrefix}_${SGE_TASK_ID}.usbam ${SamplePrefix}_${SGE_TASK_ID}
+echo samtools index ${SamplePrefix}_${SGE_TASK_ID}.bam
+samtools index ${SamplePrefix}_${SGE_TASK_ID}.bam
+
+echo rm -v  ${SamplePrefix}_${SGE_TASK_ID}.sai ${SamplePrefix}_${SGE_TASK_ID}.sam ${SamplePrefix}_${SGE_TASK_ID}.usbam
+rm -v  ${SamplePrefix}_${SGE_TASK_ID}.sai ${SamplePrefix}_${SGE_TASK_ID}.sam ${SamplePrefix}_${SGE_TASK_ID}.usbam
 
