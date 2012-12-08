@@ -18,7 +18,7 @@ RefDir="/home/kevin/workspace/refs/TAIR10_genome"
 Reference="${RefDir}/TAIR10_all_chrs" # base of ebwt from bowtie-build
 GFF="${RefDir}/TAIR10_GFF3_genes.gff"
 
-tophat -p 12 --b2-very-sensitive ${Reference} ${SamplePrefix}_${SGE_TASK_ID}.fasta
+tophat --segment-length 50 -p 12 --b2-very-sensitive ${Reference} ${SamplePrefix}_${SGE_TASK_ID}.fasta
 
 cufflinks -p 12 -G ${GFF} -b ${Reference}.fas -u ${Reference}.fas ./tophat_out/accepted_hits.bam
 
