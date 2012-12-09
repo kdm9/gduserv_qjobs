@@ -16,3 +16,5 @@ bwa samse -n 0 ${ReferenceDir}/tx_tair10rep.fasta ./${ProjectName}/rnaseq_${SGE_
 samtools view -b -S -o ./${ProjectName}/rnaseq_${SGE_TASK_ID}.bam ./${ProjectName}/rnaseq_${SGE_TASK_ID}.sam
 #R --no-save -f ${ScriptDir}/filter_bam.R --args ./${ProjectName}/rnaseq_${SGE_TASK_ID}.bam ./${ProjectName}/rnaseq_${SGE_TASK_ID}
 #R --no-save -f ${ScriptDir}/plot_baseline.R --args ./${ProjectName}/rnaseq_${SGE_TASK_ID}_filtered.csv ./${ProjectName}/rnaseq_${SGE_TASK_ID}_targets.csv ./${ProjectName}/rnaseq_${SGE_TASK_ID}
+
+echo -e "commit: $(cat ~/qjobs/.git/refs/heads/`git branch 2>/dev/null |grep "\*" |cut -d " " -f 2`) \nfile sha1: $(sha1sum $0 2>/dev/null) \ndiff from commit: $(git diff $0 2>/dev/null)"

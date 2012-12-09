@@ -32,3 +32,5 @@ samtools index ${SamplePrefix}_${SGE_TASK_ID}.bam
 echo rm -v  ${SamplePrefix}_${SGE_TASK_ID}.sai ${SamplePrefix}_${SGE_TASK_ID}.sam ${SamplePrefix}_${SGE_TASK_ID}.usbam
 rm -v  ${SamplePrefix}_${SGE_TASK_ID}.sai ${SamplePrefix}_${SGE_TASK_ID}.sam ${SamplePrefix}_${SGE_TASK_ID}.usbam
 
+
+echo -e "commit: $(cat ~/qjobs/.git/refs/heads/`git branch 2>/dev/null |grep "\*" |cut -d " " -f 2`) \nfile sha1: $(sha1sum $0 2>/dev/null) \ndiff from commit: $(git diff $0 2>/dev/null)"

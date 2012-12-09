@@ -15,3 +15,5 @@ java -Xmx62g -jar /home/kevin/opt/srna-workbenchV2.4.2/Workbench.jar -tool pares
 /home/kevin/bin/pypy /home/kevin/scripts/DegradomeAnalyseR/sanitise_paresnip_output.py ${JobName}/paresnip_${SGE_TASK_ID}.${JOB_ID}.raw > ${JobName}/paresnip_${SGE_TASK_ID}.${JOB_ID}.tab
 
 
+
+echo -e "commit: $(cat ~/qjobs/.git/refs/heads/`git branch 2>/dev/null |grep "\*" |cut -d " " -f 2`) \nfile sha1: $(sha1sum $0 2>/dev/null) \ndiff from commit: $(git diff $0 2>/dev/null)"

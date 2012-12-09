@@ -44,3 +44,5 @@ echo "of which the following number are unique"
 sort <  ${Group}.conserved.targs | uniq |wc -l
 
 
+
+echo -e "commit: $(cat ~/qjobs/.git/refs/heads/`git branch 2>/dev/null |grep "\*" |cut -d " " -f 2`) \nfile sha1: $(sha1sum $0 2>/dev/null) \ndiff from commit: $(git diff $0 2>/dev/null)"

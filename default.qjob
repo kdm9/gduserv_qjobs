@@ -6,3 +6,5 @@
 #$ -e <outdir>output
 
 echo "Task ${SGE_TASK_ID} with ${NSLOTS} slots"
+
+echo -e "commit: $(cat ~/qjobs/.git/refs/heads/`git branch 2>/dev/null |grep "\*" |cut -d " " -f 2`) \nfile sha1: $(sha1sum $0 2>/dev/null) \ndiff from commit: $(git diff $0 2>/dev/null)"
