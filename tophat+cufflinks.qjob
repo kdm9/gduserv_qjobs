@@ -4,7 +4,7 @@
 #$ -cwd
 #$ -e ./output
 #$ -o ./output
-#$ -N km_bwa
+#$ -N km_tophat+cufflinks
 #$ -pe threads 12
 # Enter an array job
 #$ -t 1-13
