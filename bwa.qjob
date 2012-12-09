@@ -17,10 +17,10 @@ ProjectName="${SamplePrefix}_genome"
 Reference="/home/kevin/workspace/refs/TAIR10_genome/TAIR10_all_chrs.fas"
 
 
-echo bwa aln -n 0 -t 12 ${Reference} ${SamplePrefix}_${SGE_TASK_ID}.fasta \> ${SamplePrefix}_${SGE_TASK_ID}.sai
-bwa aln -n 0 -t 12 ${Reference} ${SamplePrefix}_${SGE_TASK_ID}.fasta > ${SamplePrefix}_${SGE_TASK_ID}.sai
-echo bwa samse -n 0 ${Reference} ${SamplePrefix}_${SGE_TASK_ID}.sai ${SamplePrefix}_${SGE_TASK_ID}.fasta \> ${SamplePrefix}_${SGE_TASK_ID}.sam
-bwa samse -n 0 ${Reference} ${SamplePrefix}_${SGE_TASK_ID}.sai ${SamplePrefix}_${SGE_TASK_ID}.fasta > ${SamplePrefix}_${SGE_TASK_ID}.sam
+echo bwa aln -n {SGE_TASK_ID}.sai
+bwa aln -n {SGE_TASK_ID}.sai
+echo bwa samse -n {SGE_TASK_ID}.sam
+bwa samse -n {SGE_TASK_ID}.sam
 
 echo samtools view -b -S -o ${SamplePrefix}_${SGE_TASK_ID}.bam ${SamplePrefix}_${SGE_TASK_ID}.sam
 samtools view -b -S -o ${SamplePrefix}_${SGE_TASK_ID}.usbam ${SamplePrefix}_${SGE_TASK_ID}.sam
@@ -33,4 +33,5 @@ echo rm -v  ${SamplePrefix}_${SGE_TASK_ID}.sai ${SamplePrefix}_${SGE_TASK_ID}.sa
 rm -v  ${SamplePrefix}_${SGE_TASK_ID}.sai ${SamplePrefix}_${SGE_TASK_ID}.sam ${SamplePrefix}_${SGE_TASK_ID}.usbam
 
 
-echo -e "commit: $(cat ~/qjobs/.git/refs/heads/`git branch 2>/dev/null |grep "\*" |cut -d " " -f 2`) \nfile sha1: $(sha1sum $0 2>/dev/null) \ndiff from commit: $(git diff $0 2>/dev/null)"
+
+echo -e "commit: $(cat ~/qjobs/.git/$(cat ~/qjobs/.git/HEAD | cut -d ' ' -f 2)) \njob file sha1: $(sha1sum $0 |cut -d ' ' -f 1)"

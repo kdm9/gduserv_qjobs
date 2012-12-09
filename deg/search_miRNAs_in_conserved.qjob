@@ -30,7 +30,7 @@ esac
 
 cd paresnip/DA
 mkdir miRNAs
-grep -o -P "\"[0123456789]+\".+5' +[AT\-CG]+ +3'" ${Group}.conserved.tab  |uniq |sed -e "s/-//g" |grep -o -P "5' +[AT\-CG]+ +3'" > miRNAs/${Group}.conserved.srnas
+grep -o -P "\"[{Group}.conserved.srnas
 
 cd miRNAs
 
@@ -46,4 +46,5 @@ sort <  ${Group}.conserved.srnas | uniq |wc -l
 
 
 
-echo -e "commit: $(cat ~/qjobs/.git/refs/heads/`git branch 2>/dev/null |grep "\*" |cut -d " " -f 2`) \nfile sha1: $(sha1sum $0 2>/dev/null) \ndiff from commit: $(git diff $0 2>/dev/null)"
+
+echo -e "commit: $(cat ~/qjobs/.git/$(cat ~/qjobs/.git/HEAD | cut -d ' ' -f 2)) \njob file sha1: $(sha1sum $0 |cut -d ' ' -f 1)"

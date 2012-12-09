@@ -11,7 +11,7 @@ ReferenceDir="/home/kevin/workspace/arabidopsis_refseqs"
 
 cd paresnip
 mkdir Targs
- grep -o -P "^AT[12345MC]G[0123456789]+.[123456789]" paresnip_${SGE_TASK_ID}.tab > Targs/paresnip_${SGE_TASK_ID}.targs
+ grep -o -P "^AT[12345MC]G[{SGE_TASK_ID}.targs
 
 cd Targs
 
@@ -26,4 +26,5 @@ echo "of which the following number are unique"
 sort <  paresnip_${SGE_TASK_ID}.targs | uniq |wc -l
 
 
-echo -e "commit: $(cat ~/qjobs/.git/refs/heads/`git branch 2>/dev/null |grep "\*" |cut -d " " -f 2`) \nfile sha1: $(sha1sum $0 2>/dev/null) \ndiff from commit: $(git diff $0 2>/dev/null)"
+
+echo -e "commit: $(cat ~/qjobs/.git/$(cat ~/qjobs/.git/HEAD | cut -d ' ' -f 2)) \njob file sha1: $(sha1sum $0 |cut -d ' ' -f 1)"

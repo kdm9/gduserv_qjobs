@@ -38,4 +38,5 @@ R --no-save -f ${GBSFilteRPath}/tassel_create_tree.R --args ${DatasetName}.filte
 R --no-save -f ${GBSFilteRPath}/tassel_create_gps_table.R --args ${DatasetName}.filtered.csv ${DatasetName}.phylogroups.csv ${DatasetName}.names.csv ${DatasetName}
 
 
-echo -e "commit: $(cat ~/qjobs/.git/refs/heads/`git branch 2>/dev/null |grep "\*" |cut -d " " -f 2`) \nfile sha1: $(sha1sum $0 2>/dev/null) \ndiff from commit: $(git diff $0 2>/dev/null)"
+
+echo -e "commit: $(cat ~/qjobs/.git/$(cat ~/qjobs/.git/HEAD | cut -d ' ' -f 2)) \njob file sha1: $(sha1sum $0 |cut -d ' ' -f 1)"

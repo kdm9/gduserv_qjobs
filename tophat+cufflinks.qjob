@@ -24,4 +24,5 @@ tophat --segment-length 25 -o tophat_${SGE_TASK_ID} -p 12 --b2-very-sensitive ${
 echo cufflinks -p 12 -G ${GFF} -b ${Reference}.fas -u ${Reference}.fas ./tophat_out/accepted_hits.bam >&2
 cufflinks -p 12 -G ${GFF} -b ${Reference}.fas -u ${Reference}.fas ./tophat_out/accepted_hits.bam
 
-echo -e "commit: $(cat ~/qjobs/.git/refs/heads/`git branch 2>/dev/null |grep "\*" |cut -d " " -f 2`) \nfile sha1: $(sha1sum $0 2>/dev/null) \ndiff from commit: $(git diff $0 2>/dev/null)"
+
+echo -e "commit: $(cat ~/qjobs/.git/$(cat ~/qjobs/.git/HEAD | cut -d ' ' -f 2)) \njob file sha1: $(sha1sum $0 |cut -d ' ' -f 1)"

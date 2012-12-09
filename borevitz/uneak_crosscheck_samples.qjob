@@ -54,4 +54,5 @@ $TasselCMD -fork1 -UMapInfoToHapMapPlugin -w ${WorkingDir} -mnMAF 0.05 -mxMAF 0.
 ${RawDataDir}/hmp2num.pl < ${WorkingDir}/hapMap/HapMap.hmp.txt > ${WorkingDir}/hapMap/HapMap.hmn.txt
 
 
-echo -e "commit: $(cat ~/qjobs/.git/refs/heads/`git branch 2>/dev/null |grep "\*" |cut -d " " -f 2`) \nfile sha1: $(sha1sum $0 2>/dev/null) \ndiff from commit: $(git diff $0 2>/dev/null)"
+
+echo -e "commit: $(cat ~/qjobs/.git/$(cat ~/qjobs/.git/HEAD | cut -d ' ' -f 2)) \njob file sha1: $(sha1sum $0 |cut -d ' ' -f 1)"

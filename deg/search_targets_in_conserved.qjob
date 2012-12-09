@@ -30,7 +30,7 @@ esac
 
 cd paresnip/DA
 mkdir Targs
-grep -o -P "AT[12345MC]G[0123456789]+.[123456789]" ${Group}.summarised.csv > Targs/${Group}.conserved.targs
+grep -o -P "AT[12345MC]G[{Group}.conserved.targs
 cd Targs
 
 echo "${Group}.conserved has the following number of known Targs"
@@ -45,4 +45,5 @@ sort <  ${Group}.conserved.targs | uniq |wc -l
 
 
 
-echo -e "commit: $(cat ~/qjobs/.git/refs/heads/`git branch 2>/dev/null |grep "\*" |cut -d " " -f 2`) \nfile sha1: $(sha1sum $0 2>/dev/null) \ndiff from commit: $(git diff $0 2>/dev/null)"
+
+echo -e "commit: $(cat ~/qjobs/.git/$(cat ~/qjobs/.git/HEAD | cut -d ' ' -f 2)) \njob file sha1: $(sha1sum $0 |cut -d ' ' -f 1)"
