@@ -1,10 +1,15 @@
 #!/bin/bash
 #$ -cwd #run frow where qsub is called from
-#$ -t 5-20:5  # Start-End:step 
-#$ -N <name>
-#$ -o <outdir>/output
-#$ -e <outdir>output
+# -t 5-20:5  # Start-End:step 
+#$ -N test
+#$ -o output
+#$ -e output
 
-echo "Task ${SGE_TASK_ID} with ${NSLOTS} slots"
+echo "Task ${SGE_TASK_ID} with ${NSLOTS} slots $SGE_JOB_SPOOL_DIR"
 
-echo -e "commit: $(cat ~/qjobs/.git/refs/heads/`git branch 2>/dev/null |grep "\*" |cut -d " " -f 2`) \nfile sha1: $(sha1sum $0 2>/dev/null) \ndiff from commit: $(git diff $0 2>/dev/null)"
+# invoking clarke's third law here!
+script_file=$( od -A none -c $SGE_JOB_SPOOL_DIR/../../jobs/00/0001/* |sed -e "s/\s//g" |tr -d "\n" |perl -ne "if (\$_ =~ m/\\\\0(\/.+?)\\\\0/) {print \"\$1\n\";}")
+#cd `dirname $script_file`
+echo -e "commit: $(cat ~/qjobs/.git/$(cat ~/qjobs/.git/HEAD | cut -d ' ' -f 2)) \njob file sha1: $(sha1sum $0 |cut -d ' ' -f 1)"
+#diff from commit: $(git diff $script_file )"
+#echo -e "commit: $(cat ~/qjobs/.git/refs/heads/`git branch 2>/dev/null |grep "\*" |cut -d " " -f 2`) \nfile sha1: $(sha1sum $script_file 2>/dev/null) \ndiff from commit: $(git diff $script_file 2>/dev/null)"
