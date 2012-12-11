@@ -8,7 +8,7 @@
 #$ -pe threads 12
 # Enter an array job
 #$ -t 1-13
-
+#$ -V
 ScriptDir="/home/kevin/scripts"
 
 #CHANGE THESE PARAMS
