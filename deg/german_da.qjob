@@ -1,0 +1,32 @@
+#!/bin/bash
+# Change dir to cwd
+#$ -cwd
+#$ -o paresnip/output
+#$ -e paresnip/output
+#$ -N DegradomeAnalyseR
+# Enter an array job
+#$ -t 1-1
+JobName="paresnipDA"
+ReferenceDir="/home/kevin/workspace/arabidopsis_refseqs"
+DAPath="/home/kevin/scripts/DegradomeAnalyseR"
+TargetCSV="${ReferenceDir}/tx_tair10rep.csv"
+
+case ${SGE_TASK_ID} in
+    1)
+    PAREsnipFiles="paresnip_1.tab paresnip_2.tab"
+    Group="col0+xrn4"
+    ;;
+esac
+
+cd paresnip
+
+echo "R --no-save -f ${DAPath}/paresnip/paresnip_filter.R --args  $PAREsnipFiles DA/$Group"
+#R --no-save -f ${DAPath}/paresnip_filter.R --args  $PAREsnipFiles DA/$Group
+echo "R --no-save -f ${DAPath}/paresnip/paresnip_summarise.R --args  DA/$Group.conserved.tab DA/$Group"
+#R --no-save -f ${DAPath}/paresnip_summarise.R --args  DA/$Group.conserved.tab DA/$Group
+echo "R --no-save -f ${DAPath}/paresnip/paresnip_correlate_FA_SRA.R --args  DA/$Group.summarised.csv ${ReferenceDir}/tx_tair1Group"
+#R --no-save -f ${DAPath}/paresnip_correlate_FA_SRA.R --args  DA/$Group.summarised.csv ${ReferenceDir}/tx_tair1Group
+echo "R --no-save -f ${DAPath}/rnaseq/paresnip_downstream_bias.R --args  DA/$Group.summarised.csv ${ReferenceDir}/tx_tair1Group"
+#R --no-save -f ${DAPath}/paresnip_downstream_bias.R --args  DA/$Group.summarised.csv ${ReferenceDir}/tx_tair1Group
+
+echo -e "commit: $(cat ~/qjobs/.git/$(cat ~/qjobs/.git/HEAD | cut -d ' ' -f 2)) \njob file sha1: $(sha1sum $0 |cut -d ' ' -f 1)"
