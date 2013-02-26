@@ -8,13 +8,26 @@
 # Enter an array job
 #$ -t 1-2
 JobName="paresnip"
-ReferenceDir="/home/kevin/workspace/arabidopsis_refseqs"
+ReferenceDir="/home/kevin/workspace/refs"
 
-java -Xmx62g -jar /home/kevin/opt/srna-workbenchV2.4.2/Workbench.jar -tool paresnip -f -params /home/kevin/qjobs/deg/paresnip.params -deg_file deg_${SGE_TASK_ID}.fasta -srna_file srna_${SGE_TASK_ID}.fasta -tran_file ${ReferenceDir}/tx_tair1{JOB_ID}.raw
+java -Xmx62g -jar /home/kevin/opt/srna-workbenchV2.4.2/Workbench.jar \
+    -tool paresnip \
+    -f \  # Overwrite existing files
+    -params /home/kevin/qjobs/deg/paresnip.params \
+    -deg_file deg_${SGE_TASK_ID}.fasta \
+    -srna_file srna_${SGE_TASK_ID}.fasta \
+    -tran_file ${ReferenceDir}/tx_tair10rep.fasta \
+    -out_file paresnip/paresnip_${SGE_TASK_ID}.{JOB_ID}.raw
 
-/home/kevin/bin/pypy /home/kevin/scripts/DegradomeAnalyseR/sanitise_paresnip_output.py ${JobName}/paresnip_${SGE_TASK_ID}.${JOB_ID}.raw > ${JobName}/paresnip_${SGE_TASK_ID}.${JOB_ID}.tab
+/home/kevin/bin/pypy /home/kevin/scripts/DegradomeAnalyseR/sanitise_paresnip_output.py \
+    paresnip/paresnip_${SGE_TASK_ID}.${JOB_ID}.raw \
+    > paresnip/paresnip_${SGE_TASK_ID}.${JOB_ID}.tab
 
+rm paresnip_${SGE_TASK_ID}.raw
+ln -s paresnip_${SGE_TASK_ID}.${JOB_ID}.raw paresnip_${SGE_TASK_ID}.raw
 
+rm paresnip_${SGE_TASK_ID}.tab
+ln -s paresnip/paresnip_${SGE_TASK_ID}.${JOB_ID}.tab paresnip_${SGE_TASK_ID}.tab
 
 
 echo -e "commit: $(cat ~/qjobs/.git/$(cat ~/qjobs/.git/HEAD | cut -d ' ' -f 2)) \njob file sha1: $(sha1sum $0 |cut -d ' ' -f 1)"
