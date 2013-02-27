@@ -19,7 +19,7 @@ java -Xmx62g -jar /home/kevin/opt/srna-workbenchV2.4.2/Workbench.jar \
     -tran_file ${ReferenceDir}/tx_tair10rep.fasta \
     -out_file paresnip/paresnip_${SGE_TASK_ID}.{JOB_ID}.raw
 
-/home/kevin/bin/pypy /home/kevin/scripts/DegradomeAnalyseR/sanitise_paresnip_output.py \
+/home/kevin/bin/pypy /home/kevin/opt/DegradomeAnalyseR/scripts/sanitise_paresnip_output.py \
     paresnip/paresnip_${SGE_TASK_ID}.${JOB_ID}.raw \
     > paresnip/paresnip_${SGE_TASK_ID}.${JOB_ID}.tab
 
