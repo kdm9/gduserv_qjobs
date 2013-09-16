@@ -5,11 +5,13 @@
 #$ -e paresnip/output
 #$ -N DegradomeAnalyseR
 # Enter an array job
-#$ -t 1-5
+#$ -t 1-6
 JobName="paresnipDA"
-ReferenceDir="/home/kevin/workspace/arabidopsis_refseqs"
-DAPath="/home/kevin/scripts/DegradomeAnalyseR"
-TargetCSV="${ReferenceDir}/tx_tair10rep.csv"
+DAPath="/home/kevin/opt/DegradomeAnalyseR"
+TargetCSV="/home/kevin/workspace/refs/TAIR10_txome/tx_tair10rep.targets.csv"
+KeyFile="/home/kevin/workspace/deg/keyfile"
+ParesnipDir="/home/kevin/workspace/deg/paresnip"
+
 
 case ${SGE_TASK_ID} in
     1)
@@ -18,11 +20,10 @@ case ${SGE_TASK_ID} in
     ;;
     2)
     PAREsnipFiles="paresnip_4.tab paresnip_5.tab paresnip_6.tab"
-    Group="xrn4"
+    Group="xrn23"
     ;;
     3)
-    #PAREsnipFiles="paresnip_7.tab paresnip_8.tab paresnip_9.tab"
-    PAREsnipFiles="paresnip_14.tab paresnip_15.tab paresnip_16.tab"
+    PAREsnipFiles="paresnip_7.tab paresnip_8.tab paresnip_9.tab"
     Group="alx8"
     ;;
     4)
@@ -33,19 +34,22 @@ case ${SGE_TASK_ID} in
     PAREsnipFiles="paresnip_12.tab paresnip_13.tab"
     Group="xrn4_ecker"
     ;;
+    6)
+    PAREsnipFiles="paresnip_17.tab paresnip_18.tab"
+    Group="german"
+    ;;
 esac
 
+cd ${ParesnipDir}
 
-cd paresnip
+rm DA/*  # remove existing links
 
-echo "R --no-save -f ${DAPath}/paresnip_filter.R --args  $PAREsnipFiles DA/$Group"
-#R --no-save -f ${DAPath}/paresnip_filter.R --args  $PAREsnipFiles DA/$Group
-echo "R --no-save -f ${DAPath}/paresnip_summarise.R --args  DA/$Group.conserved.tab DA/$Group"
-#R --no-save -f ${DAPath}/paresnip_summarise.R --args  DA/$Group.conserved.tab DA/$Group
-echo "R --no-save -f ${DAPath}/paresnip_correlate_FA_SRA.R --args  DA/$Group.summarised.csv ${ReferenceDir}/tx_tair1Group"
-#R --no-save -f ${DAPath}/paresnip_correlate_FA_SRA.R --args  DA/$Group.summarised.csv ${ReferenceDir}/tx_tair1Group
-echo "R --no-save -f ${DAPath}/paresnip_downstream_bias.R --args  DA/$Group.summarised.csv ${ReferenceDir}/tx_tair1Group"
-R --no-save -f ${DAPath}/paresnip_downstream_bias.R --args  DA/$Group.summarised.csv ${ReferenceDir}/tx_tair1Group
+R --no-save -f ${DAPath}/paresnip_filter.R --args  $PAREsnipFiles DA/${SGE_JOB_ID}/$Group
+R --no-save -f ${DAPath}/paresnip_summarise.R --args  DA/${SGE_JOB_ID}/$Group.conserved.tab DA/${SGE_JOB_ID}/$Group
+R --no-save -f ${DAPath}/paresnip_correlate_FA_SRA.R --args  DA/${SGE_JOB_ID}/$Group.summarised.csv ${TargetCSV} DA/${SGE_JOB_ID}/$Group
+R --no-save -f ${DAPath}/paresnip_downstream_bias.R --args  DA/${SGE_JOB_ID}/$Group.summarised.csv ${TargetCSV} DA/${SGE_JOB_ID}/$Group
 
+ln -s DA/${SGE_JOB_ID}/* DA/
 
-echo -e "commit: $(cat ~/qjobs/.git/$(cat ~/qjobs/.git/HEAD | cut -d ' ' -f 2)) \njob file sha1: $(sha1sum $0 |cut -d ' ' -f 1)"
+echo -e "commit: $(cat ~/qjobs/.git/$(cat ~/qjobs/.git/HEAD | cut -d ' ' -f 2)) \njob file sha1: $(sha1sum $0 |cut -d ' ' -f 1)" >&2
+cat $0 >&2
